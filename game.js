@@ -2,145 +2,123 @@ const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
 function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
 }
 resize();
-window.addEventListener("resize", resize);
+addEventListener("resize", resize);
 
-/* UI */
-const menu = document.getElementById("menu");
-const levelSelect = document.getElementById("levelSelect");
+/* Landscape lock */
+function checkOrientation() {
+  const warn = document.getElementById("rotate-warning");
+  warn.style.display = innerWidth < innerHeight ? "flex" : "none";
+}
+setInterval(checkOrientation, 300);
 
-document.getElementById("playBtn").onclick = () => {
-  menu.classList.add("hidden");
-  levelSelect.classList.remove("hidden");
+/* Player */
+const player = {
+  x: 150,
+  y: 300,
+  size: 40,
+  velY: 0,
+  gravity: 1.2,
+  jump: -18,
+  grounded: false
 };
 
-document.querySelectorAll(".levelBtn").forEach(btn => {
-  btn.onclick = () => {
-    levelSelect.classList.add("hidden");
-    startLevel(LEVELS[btn.dataset.level]);
-  };
+let camX = 0;
+let playing = false;
+
+/* Music */
+const music = new Audio(LEVEL.music);
+
+/* Controls */
+addEventListener("pointerdown", () => {
+  if (player.grounded && playing) {
+    player.velY = player.jump;
+    player.grounded = false;
+  }
 });
 
-/* MUSIC */
-let music;
-function playLevelMusic(src) {
-  if (music) {
-    music.pause();
-    music.currentTime = 0;
-  }
-
-  music = new Audio(src);
-  music.loop = true;
-  music.volume = 0.6;
+/* Start */
+document.getElementById("startBtn").onclick = () => {
+  document.getElementById("overlay").style.display = "none";
+  music.currentTime = 0;
   music.play();
+  playing = true;
+  loop();
+};
+
+/* Collision */
+function rectHit(a, b) {
+  return (
+    a.x < b.x + b.w &&
+    a.x + a.size > b.x &&
+    a.y < b.y + b.h &&
+    a.y + a.size > b.y
+  );
 }
 
-/* GAME STATE */
-let player, level, camX, running;
-
-/* PHYSICS */
-const GRAVITY = 0.9;
-const JUMP_FORCE = -14;
-
-/* INPUT */
-function jump() {
-  if (player.onGround) {
-    player.vy = JUMP_FORCE;
-    player.onGround = false;
-  }
-}
-document.addEventListener("touchstart", jump);
-document.addEventListener("mousedown", jump);
-
-/* START LEVEL */
-function startLevel(lvl) {
-  level = lvl;
-  camX = 0;
-  running = true;
-
-  player = {
-    x: 100,
-    y: 200,
-    w: 30,
-    h: 30,
-    vy: 0,
-    onGround: false
-  };
-
-  playLevelMusic(level.music);
-  requestAnimationFrame(loop);
-}
-
-/* MAIN LOOP */
+/* Loop */
 function loop() {
-  if (!running) return;
+  if (!playing) return;
 
-  camX += level.speed;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  // physics
-  player.vy += GRAVITY;
-  player.y += player.vy;
-  player.onGround = false;
+  camX += LEVEL.speed;
 
-  for (const o of level.objects) {
-    const ox = o.x - camX;
+  /* Player physics */
+  player.velY += player.gravity;
+  player.y += player.velY;
+  player.grounded = false;
 
-    // collision block/ground
-    if (o.type === "ground" || o.type === "block") {
-      if (
-        player.x < ox + o.w &&
-        player.x + player.w > ox &&
-        player.y + player.h <= o.y + 10 &&
-        player.y + player.h + player.vy >= o.y
-      ) {
-        player.y = o.y - player.h;
-        player.vy = 0;
-        player.onGround = true;
-      }
-    }
-
-    // spike = death
-    if (o.type === "spike") {
-      if (
-        player.x + player.w > ox &&
-        player.x < ox + 30 &&
-        player.y + player.h > o.y
-      ) {
-        running = false;
-        music.pause();
-        setTimeout(() => location.reload(), 300);
-      }
-    }
+  if (player.y + player.size > 420) {
+    player.y = 420 - player.size;
+    player.velY = 0;
+    player.grounded = true;
   }
 
-  // draw
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  /* Blocks */
+  LEVEL.blocks.forEach(b => {
+    let bx = b.x - camX;
+    let by = b.y;
 
-  // player
-  ctx.fillStyle = "#00ffff";
-  ctx.fillRect(player.x, player.y, player.w, player.h);
-
-  // objects
-  for (const o of level.objects) {
-    const ox = o.x - camX;
-
-    if (o.type === "ground" || o.type === "block") {
-      ctx.fillStyle = "#555";
-      ctx.fillRect(ox, o.y, o.w, o.h);
+    if (b.moveY) {
+      by += Math.sin(Date.now()/300) * 30;
     }
 
-    if (o.type === "spike") {
-      ctx.fillStyle = "#ff3333";
-      ctx.beginPath();
-      ctx.moveTo(ox, o.y + 30);
-      ctx.lineTo(ox + 15, o.y);
-      ctx.lineTo(ox + 30, o.y + 30);
-      ctx.fill();
+    ctx.fillStyle = "#00ffff";
+    ctx.fillRect(bx, by, b.w, b.h);
+
+    if (rectHit(player, {x:bx,y:by,w:b.w,h:b.h})) {
+      player.y = by - player.size;
+      player.velY = 0;
+      player.grounded = true;
     }
-  }
+  });
+
+  /* Spikes */
+  LEVEL.spikes.forEach(s => {
+    let sx = s.x - camX;
+    ctx.fillStyle = "red";
+    ctx.beginPath();
+    ctx.moveTo(sx, s.y + 40);
+    ctx.lineTo(sx + 20, s.y);
+    ctx.lineTo(sx + 40, s.y + 40);
+    ctx.fill();
+
+    if (
+      player.x + player.size > sx &&
+      player.x < sx + 40 &&
+      player.y + player.size > s.y
+    ) {
+      location.reload();
+    }
+  });
+
+  /* Player draw */
+  ctx.fillStyle = "white";
+  ctx.fillRect(player.x, player.y, player.size, player.size);
 
   requestAnimationFrame(loop);
-    }
+}
