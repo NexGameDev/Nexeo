@@ -1,40 +1,25 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>GeoBeat</title>
-
-  <!-- Mobile lock -->
-  <meta name="viewport"
-        content="width=device-width,
-        initial-scale=1.0,
-        maximum-scale=1.0,
-        user-scalable=no">
-
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
-
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>NEXEO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div id="rotate-warning">
+    <p>🔄 Putar layar ke mode landscape</p>
+  </div>
 
-<!-- MENU -->
-<div id="menu">
-  <h1>GEOBEAT</h1>
-  <button id="playBtn">PLAY</button>
-</div>
+  <canvas id="game"></canvas>
 
-<!-- LEVEL SELECT -->
-<div id="levelSelect" class="hidden">
-  <h2>Select Level</h2>
-  <button class="levelBtn" data-level="0">
-    Level 1 – Game On
-  </button>
-</div>
+  <div id="overlay">
+    <h1>NEXEO</h1>
+    <p>Level 2 — GAME ON</p>
+    <button id="startBtn">PLAY</button>
+  </div>
 
-<canvas id="game"></canvas>
-
-<script src="level.js"></script>
-<script src="game.js"></script>
+  <script src="level2.js"></script>
+  <script src="game.js"></script>
 </body>
 </html>
