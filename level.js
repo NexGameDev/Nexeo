@@ -1,32 +1,47 @@
-const LEVELS = [
-  {
-    name: "Game On",
-    music: "assets/gameon.mp3",
-    bpm: 130,
-    speed: 5,
-    length: 3000,
-    objects: [
-      // ground
-      { x: 0, y: 260, w: 4000, h: 40, type: "ground" },
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>NEXEO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="rotate-warning">
+    <p>🔄 Putar layar ke mode landscape</p>
+  </div>
 
-      // intro jumps (tiap beat)
-      { x: 400, y: 220, w: 40, h: 40, type: "block" },
-      { x: 520, y: 200, w: 40, h: 60, type: "block" },
+  <canvas id="game"></canvas>
 
-      // spike ringan
-      { x: 680, y: 240, type: "spike" },
-      { x: 760, y: 240, type: "spike" },
+  <div id="overlay">
+    <h1>NEXEO</h1>
+    <p>Level 2 — GAME ON</p>
+    <button id="startBtn">PLAY</button>
+  </div>
 
-      // back-on-track style rising blocks
-      { x: 900, y: 210, w: 40, h: 90, type: "block" },
-      { x: 1020, y: 180, w: 40, h: 120, type: "block" },
+  <script src="level2.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>const LEVEL = {
+  name: "GAME ON",
+  music: "assets/gameon.mp3",
+  speed: 6,
 
-      // break
-      { x: 1180, y: 240, type: "spike" },
+  blocks: [
+    { x: 400, y: 320, w: 60, h: 60 },
+    { x: 550, y: 280, w: 60, h: 100 },
+    { x: 700, y: 240, w: 60, h: 140 },
 
-      // end section
-      { x: 1350, y: 200, w: 40, h: 100, type: "block" },
-      { x: 1500, y: 170, w: 40, h: 130, type: "block" }
-    ]
-  }
-];
+    { x: 1000, y: 350, w: 80, h: 30, moveY: true },
+    { x: 1200, y: 300, w: 80, h: 30, moveY: true },
+  ],
+
+  spikes: [
+    { x: 850, y: 380 },
+    { x: 880, y: 380 },
+    { x: 910, y: 380 },
+
+    { x: 1400, y: 380 },
+    { x: 1430, y: 380 },
+  ]
+};
