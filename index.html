@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0,
+    maximum-scale=1.0, user-scalable=no" />
+  <title>GeoBeat</title>
+
+  <!-- Disable zoom & scroll -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="menu">
+  <h1>GEOBEAT</h1>
+  <button id="playBtn">PLAY</button>
+</div>
+
+<div id="levelSelect" class="hidden">
+  <h2>Select Level</h2>
+  <button class="levelBtn" data-level="0">Level 1 – Game On</button>
+</div>
+
+<canvas id="game"></canvas>
+
+<script src="level.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
