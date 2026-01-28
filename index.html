@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport"
-    content="width=device-width, initial-scale=1.0,
-    maximum-scale=1.0, user-scalable=no" />
+  <meta charset="UTF-8">
   <title>GeoBeat</title>
 
-  <!-- Disable zoom & scroll -->
+  <!-- Mobile lock -->
+  <meta name="viewport"
+        content="width=device-width,
+        initial-scale=1.0,
+        maximum-scale=1.0,
+        user-scalable=no">
+
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
 
@@ -15,14 +18,18 @@
 </head>
 <body>
 
+<!-- MENU -->
 <div id="menu">
   <h1>GEOBEAT</h1>
   <button id="playBtn">PLAY</button>
 </div>
 
+<!-- LEVEL SELECT -->
 <div id="levelSelect" class="hidden">
   <h2>Select Level</h2>
-  <button class="levelBtn" data-level="0">Level 1 – Game On</button>
+  <button class="levelBtn" data-level="0">
+    Level 1 – Game On
+  </button>
 </div>
 
 <canvas id="game"></canvas>
