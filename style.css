@@ -18,11 +18,12 @@ canvas {
   background: #111;
 }
 
+/* MENU */
 #menu, #levelSelect {
   position: absolute;
   inset: 0;
   background: #000;
-  color: #0ff;
+  color: #00ffff;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -33,11 +34,19 @@ canvas {
   display: none;
 }
 
+h1 {
+  font-size: 48px;
+}
+
+h2 {
+  font-size: 28px;
+}
+
 button {
+  margin-top: 20px;
   padding: 14px 28px;
   font-size: 18px;
-  margin-top: 20px;
-  background: #0ff;
+  background: #00ffff;
   color: #000;
   border: none;
   border-radius: 8px;
